@@ -5,12 +5,12 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from io import BytesIO
 
-# Function to convert Unix timestamp to human-readable time in local time zone
+# **Function to convert Unix timestamp to human-readable time in local time zone**
 def unix_to_local_time(unix_timestamp, timezone_offset):
     local_time = datetime.utcfromtimestamp(unix_timestamp) + timedelta(seconds=timezone_offset)
     return local_time.strftime('%H:%M:%S')
 
-# Function to suggest outfits based on the weather
+# **Function to suggest outfits based on the weather**
 def outfit_suggestions(temp, description):
     if temp > 25:
         return "🌞 It's warm! Wear light clothes like shorts and a T-shirt."
@@ -21,7 +21,7 @@ def outfit_suggestions(temp, description):
     else:
         return "🌤️ Dress comfortably, maybe with a sweater or light jacket."
 
-# Function to set weather background based on weather description
+# **Function to set weather background based on weather description**
 def set_weather_background(description):
     description = description.lower()
     if "clear" in description:
@@ -39,7 +39,7 @@ def set_weather_background(description):
 
     set_background_image(background_image_url)
 
-# Function to set background image
+# **Function to set background image**
 def set_background_image(image_url):
     st.markdown(
         f"""
@@ -56,7 +56,7 @@ def set_background_image(image_url):
         unsafe_allow_html=True
     )
 
-# Function to get weather data
+# **Function to get weather data**
 def get_weather(city, api_key):
     url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
     response = requests.get(url)
@@ -71,31 +71,31 @@ def get_weather(city, api_key):
         sunrise = unix_to_local_time(data['sys']['sunrise'], data['timezone'])
         sunset = unix_to_local_time(data['sys']['sunset'], data['timezone'])
 
-        # Display weather info
-        st.write(f"🌡️ Temperature in {city}: {temperature}°C")
-        st.write(f"🌥️ Weather Description: {description.capitalize()}")
-        st.write(f"💨 Wind Speed: {wind_speed} m/s")
-        st.write(f"💧 Humidity: {humidity}%")
-        st.write(f"🌅 Sunrise: {sunrise} (Local Time)")
-        st.write(f"🌇 Sunset: {sunset} (Local Time)")
+        # **Display weather info with bold letters**
+        st.write(f"🌡️ **Temperature** in {city}: **{temperature}°C**")
+        st.write(f"🌥️ **Weather Description**: **{description.capitalize()}**")
+        st.write(f"💨 **Wind Speed**: **{wind_speed} m/s**")
+        st.write(f"💧 **Humidity**: **{humidity}%**")
+        st.write(f"🌅 **Sunrise**: **{sunrise}** (Local Time)")
+        st.write(f"🌇 **Sunset**: **{sunset}** (Local Time)")
 
-        # Display weather icon
+        # **Display weather icon**
         st.image(f"http://openweathermap.org/img/wn/{weather_icon}.png", width=100)
 
-        # Outfit suggestion
+        # **Outfit suggestion**
         outfit = outfit_suggestions(temperature, description)
-        st.markdown(f"👗 **Outfit Suggestion:** {outfit}")
+        st.markdown(f"👗 **Outfit Suggestion**: {outfit}")
 
-        # Set background based on weather
+        # **Set background based on weather**
         set_weather_background(description)
 
-        # Fetch and display 5-day forecast in the sidebar
+        # **Fetch and display 5-day forecast in the sidebar**
         get_forecast(city, api_key)
 
     else:
         st.write("❌ City not found. Please try again!")
 
-# Function to get 5-day weather forecast and display graph in sidebar
+# **Function to get 5-day weather forecast and display graph in sidebar**
 def get_forecast(city, api_key):
     url = f"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={api_key}&units=metric"
     response = requests.get(url)
@@ -116,21 +116,21 @@ def get_forecast(city, api_key):
             dates.append(date)
             temps.append(temp)
 
-            st.sidebar.write(f"📅 {date}: {temp}°C, {description}")
+            st.sidebar.write(f"📅 {date}: **{temp}°C**, **{description}**")
             st.sidebar.image(f"http://openweathermap.org/img/wn/{icon}.png", width=50)
 
-        # Load background image from URL (weather-themed background)
+        # **Load background image from URL (weather-themed background)**
         bg_url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgyC8gReZ4RtauxTzgODM1Zi2qt8wx8ZGK1g&s"  # You can change this to a weather-themed image URL
         response = requests.get(bg_url)
         bg_img = Image.open(BytesIO(response.content)).convert("RGBA")
 
-        # Create the graph
+        # **Create the graph**
         fig, ax = plt.subplots(figsize=(4, 3))
 
-        # Display background image
+        # **Display background image**
         ax.imshow(bg_img, extent=[-0.5, len(dates)-0.5, min(temps)-5, max(temps)+5], aspect='auto', alpha=0.3)
 
-        # Plot temperature trend
+        # **Plot temperature trend**
         ax.plot(dates, temps, marker='o', linestyle='-', color='blue')
         ax.set_title("📈 5-Day Temperature Trend")
         ax.set_xlabel("Date")
@@ -139,18 +139,18 @@ def get_forecast(city, api_key):
         ax.set_xticks(range(len(dates)))
         ax.set_xticklabels(dates, rotation=45)
 
-        # Display graph in the sidebar
+        # **Display graph in the sidebar**
         st.sidebar.pyplot(fig)
 
     else:
         st.write("❌ Could not fetch forecast data.")
 
-# Main function to run the app
+# **Main function to run the app**
 def main():
     api_key = "a6f81aff8e354cf14db2c448cbb27e5c"  # Replace with your actual API key
     st.title("📡 Today's Weather")
 
-    # Default background
+    # **Default background**
     background_image_url = "https://img.freepik.com/free-vector/sunshine-background-poster_1284-9444.jpg?semt=ais_hybrid&w=740"
     set_background_image(background_image_url)
 
