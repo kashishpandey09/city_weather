@@ -1,6 +1,9 @@
 import requests
 import streamlit as st
 from datetime import datetime, timedelta
+import matplotlib.pyplot as plt
+from PIL import Image
+from io import BytesIO
 
 # Function to convert Unix timestamp to human-readable time in local time zone
 def unix_to_local_time(unix_timestamp, timezone_offset):
@@ -92,7 +95,7 @@ def get_weather(city, api_key):
     else:
         st.write("❌ City not found. Please try again!")
 
-# Function to get 5-day weather forecast
+# Function to get 5-day weather forecast and display graph in sidebar
 def get_forecast(city, api_key):
     url = f"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={api_key}&units=metric"
     response = requests.get(url)
@@ -100,15 +103,44 @@ def get_forecast(city, api_key):
     if response.status_code == 200:
         data = response.json()
 
-        # Display the 5-day forecast in the sidebar
         st.sidebar.write("🌤️ 5-Day Forecast:")
-        for forecast in data['list'][::8]:  # Take one forecast every 24 hours
-            date = datetime.utcfromtimestamp(forecast['dt'])
+        dates = []
+        temps = []
+
+        for forecast in data['list'][::8]:  # Get one forecast every 24 hours
+            date = datetime.utcfromtimestamp(forecast['dt']).strftime('%Y-%m-%d')
             temp = forecast['main']['temp']
             description = forecast['weather'][0]['description']
-            weather_icon = forecast['weather'][0]['icon']
-            st.sidebar.write(f"📅 {date.strftime('%Y-%m-%d %H:%M:%S')}: {temp}°C, {description}")
-            st.sidebar.image(f"http://openweathermap.org/img/wn/{weather_icon}.png", width=50)
+            icon = forecast['weather'][0]['icon']
+
+            dates.append(date)
+            temps.append(temp)
+
+            st.sidebar.write(f"📅 {date}: {temp}°C, {description}")
+            st.sidebar.image(f"http://openweathermap.org/img/wn/{icon}.png", width=50)
+
+        # Load background image from URL (weather-themed background)
+        bg_url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgyC8gReZ4RtauxTzgODM1Zi2qt8wx8ZGK1g&s"  # You can change this to a weather-themed image URL
+        response = requests.get(bg_url)
+        bg_img = Image.open(BytesIO(response.content)).convert("RGBA")
+
+        # Create the graph
+        fig, ax = plt.subplots(figsize=(4, 3))
+
+        # Display background image
+        ax.imshow(bg_img, extent=[-0.5, len(dates)-0.5, min(temps)-5, max(temps)+5], aspect='auto', alpha=0.3)
+
+        # Plot temperature trend
+        ax.plot(dates, temps, marker='o', linestyle='-', color='blue')
+        ax.set_title("📈 5-Day Temperature Trend")
+        ax.set_xlabel("Date")
+        ax.set_ylabel("°C")
+        ax.grid(True)
+        ax.set_xticks(range(len(dates)))
+        ax.set_xticklabels(dates, rotation=45)
+
+        # Display graph in the sidebar
+        st.sidebar.pyplot(fig)
 
     else:
         st.write("❌ Could not fetch forecast data.")
