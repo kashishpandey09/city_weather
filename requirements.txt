@@ -1,6 +1,5 @@
-requests
 streamlit
-datetime 
-timedelta
-matplotlip
+requests
+matplotlib
+Pillow
 
