@@ -160,13 +160,13 @@ def about_section():
 
     cols = st.columns(3)
     with cols[0]:
-        show_resized_image(r"C:\Users\HP-11\Desktop\New folder\images\Altaf.jpeg", "Altaf Hussain")
+        show_resized_image(r"C:\images\Altaf.jpeg", "Altaf Hussain")
         st.markdown("**Team Coordinator**")
     with cols[1]:
-        show_resized_image(r"C:\Users\HP-11\Desktop\New folder\images\shreya.jpeg", "Shreya Singh")
+        show_resized_image(r"C:\images\shreya.jpeg", "Shreya Singh")
         st.markdown("**Backend Developer**")
     with cols[2]:
-        show_resized_image(r"C:\Users\HP-11\Desktop\New folder\images\Kashi.jpeg", "Kashish Pandey")
+        show_resized_image(r"C:\images\Kashi.jpeg", "Kashish Pandey")
         st.markdown("**Frontend Developer**")
 
     st.markdown("---")
