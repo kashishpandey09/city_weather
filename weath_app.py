@@ -167,7 +167,7 @@ def about_section():
         show_resized_image("images/shreya.jpeg", "Shreya Singh")
         st.markdown("**Backend Developer**")
     with cols[2]:
-        show_resized_image("images/Kashi.jpeg", "Kashish Pandey")
+        show_resized_image("images/Kashi.png", "Kashish Pandey")
         st.markdown("**Frontend Developer**")
 
     st.markdown("---")
