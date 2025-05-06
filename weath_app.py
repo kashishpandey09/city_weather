@@ -144,25 +144,34 @@ def get_forecast(city, api_key):
     else:
         st.write("❌ Could not fetch forecast data.")
 
-# About section
+# Add this helper function near the top of your code
+def show_resized_image(image_path, caption, size=(150, 150)):
+    try:
+        img = Image.open(image_path)
+        img = img.resize(size)
+        st.image(img, caption=caption)
+    except Exception as e:
+        st.error(f"Error loading image '{caption}': {e}")
+
+# Update your about_section() to use resized images
 def about_section():
     st.title("👨‍💼 About Us")
     st.markdown("Welcome to our weather app! Meet the team:")
 
     cols = st.columns(3)
     with cols[0]:
-        st.image("https://via.placeholder.com/150", caption="Altaf Hussain")
+        show_resized_image(r"C:\Users\HP-11\Desktop\New folder\images\Altaf.jpeg", "Altaf Hussain")
         st.markdown("**Team Coordinator**")
     with cols[1]:
-        st.image("https://via.placeholder.com/150", caption="Shreya Singh")
+        show_resized_image(r"C:\Users\HP-11\Desktop\New folder\images\shreya.jpeg", "Shreya Singh")
         st.markdown("**Backend Developer**")
     with cols[2]:
-        st.image("https://via.placeholder.com/150", caption="Kashish Pandey")
+        show_resized_image(r"C:\Users\HP-11\Desktop\New folder\images\Kashi.jpeg", "Kashish Pandey")
         st.markdown("**Frontend Developer**")
 
     st.markdown("---")
     st.subheader("📞 Contact Us")
-    st.write("Email:altafaipa95@gmail.com")
+    st.write("Email: altafaipa95@gmail.com")
     st.write("Phone: +9125971036")
 
 # Main function
