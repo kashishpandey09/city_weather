@@ -5,6 +5,20 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from io import BytesIO
 
+
+hide_streamlit_cloud_elements = """
+    <style>
+    #MainMenu {visibility: hidden;}
+    header {visibility: hidden;}
+    footer {visibility: hidden;}
+    .stDeployButton {display: none;}
+    a[title="View source"] {display: none !important;}
+    button[kind="icon"] {display: none !important;}
+    </style>
+"""
+st.markdown(hide_streamlit_cloud_elements, unsafe_allow_html=True)
+
+
 # **Function to convert Unix timestamp to human-readable time in local time zone**
 def unix_to_local_time(unix_timestamp, timezone_offset):
     local_time = datetime.utcfromtimestamp(unix_timestamp) + timedelta(seconds=timezone_offset)
