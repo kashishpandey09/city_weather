@@ -10,7 +10,8 @@ import os
 st.set_page_config(layout="wide")
 
 # ✅ HIDE STREAMLIT MENU, FOOTER, ETC.
- <style>
+ hide_streamlit_cloud_elements = """
+    <style>
     #MainMenu {visibility: hidden;}
     header {visibility: hidden;}
     footer {visibility: hidden;}
